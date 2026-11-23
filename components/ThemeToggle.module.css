@@ -1,0 +1,72 @@
+.toggle {
+  position: relative;
+  width: 64px;
+  height: 34px;
+  padding: 0;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid var(--toggle-border);
+  background: var(--toggle-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.toggle:hover {
+  border-color: var(--accent-soft);
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  width: 15px;
+  height: 15px;
+  margin-top: -7.5px;
+  color: var(--toggle-icon);
+}
+
+.iconSun {
+  left: 9px;
+}
+
+.iconMoon {
+  right: 9px;
+}
+
+/* The thumb sits on the active side (moon/right = dark, sun/left = light)
+   and covers that side's track icon with its own copy of the icon. */
+.thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--toggle-thumb-icon);
+  background: var(--toggle-thumb);
+  box-shadow: 0 2px 10px rgba(255, 138, 61, 0.45);
+  transform: translateX(30px);
+}
+
+.thumb svg {
+  width: 14px;
+  height: 14px;
+}
+
+.thumbLight {
+  transform: translateX(0);
+}
+
+.ready .thumb {
+  transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ready .thumb {
+    transition: none;
+  }
+}

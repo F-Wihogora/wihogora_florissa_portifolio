@@ -1,0 +1,104 @@
+.skills {
+  position: relative;
+  z-index: 1;
+  background: var(--bg-alt);
+  padding: var(--section-pad-y) var(--section-pad-x);
+  border-top: 1px solid var(--border);
+}
+
+.inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  will-change: transform, opacity;
+}
+
+.header {
+  max-width: 640px;
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(28px, 3.6vw, 44px);
+  line-height: 1.2;
+  margin: 16px 0 14px;
+  color: var(--text);
+}
+
+.subtitle {
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.7;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 26px 24px;
+  transition: border-color 0.35s ease, transform 0.35s ease, background 0.35s ease;
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
+  transform: translateY(-3px);
+}
+
+.cardTitle {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--accent-soft);
+  margin: 0 0 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pillList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  font-size: 13px;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.28s ease, border-color 0.28s ease, color 0.28s ease;
+}
+
+.pill:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: var(--accent-dim);
+  border-color: rgba(255, 138, 61, 0.35);
+  color: var(--accent-soft);
+}
+
+@media (max-width: 980px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

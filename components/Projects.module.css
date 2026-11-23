@@ -1,0 +1,220 @@
+.projects {
+  position: relative;
+  z-index: 1;
+  background: var(--bg);
+  padding: var(--section-pad-y) var(--section-pad-x);
+  border-top: 1px solid var(--border);
+}
+
+.header {
+  max-width: var(--container);
+  margin: 0 auto clamp(56px, 7vw, 88px);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.15;
+  margin: 16px 0 0;
+  color: var(--text);
+}
+
+.titleAccent {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.list {
+  max-width: var(--container);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(64px, 9vw, 120px);
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+
+.panelReverse {
+  grid-template-columns: 0.9fr 1.1fr;
+}
+
+.panelReverse .imageWrap {
+  order: 2;
+}
+
+.panelReverse .panelCopy {
+  order: 1;
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--surface), var(--bg-alt));
+  border: 1px solid var(--border);
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, clip-path;
+  pointer-events: none;
+  user-select: none;
+}
+
+.panelIndex {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(10, 8, 6, 0.72);
+  padding: 6px 11px;
+  border-radius: 999px;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.credit {
+  position: absolute;
+  left: 18px;
+  bottom: 16px;
+  z-index: 2;
+  max-width: 62%;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+  padding-bottom: 1px;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.credit:hover {
+  color: #fff;
+  border-color: #fff;
+}
+
+.panelCopy {
+  max-width: 520px;
+}
+
+.panelTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(22px, 2.4vw, 28px);
+  color: var(--text);
+  margin: 0 0 12px;
+  will-change: transform, opacity;
+}
+
+.panelDescription {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--text-dim);
+  margin: 0 0 18px;
+  will-change: transform, opacity;
+}
+
+.featureList {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+  gap: 8px 18px;
+  will-change: transform, opacity;
+}
+
+.featureItem {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  padding-left: 14px;
+  position: relative;
+}
+
+.featureItem::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 6px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.stackRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  will-change: transform, opacity;
+}
+
+.stackPill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-soft);
+  background: var(--accent-dim);
+  border: 1px solid rgba(255, 138, 61, 0.25);
+  padding: 5px 11px;
+  border-radius: 999px;
+  transition: transform 0.25s ease;
+}
+
+.stackPill:hover {
+  transform: translateY(-2px);
+}
+
+.moreLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: var(--container);
+  margin: clamp(48px, 6vw, 72px) auto 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 4px;
+  transition: color 0.3s ease, gap 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.moreLink:hover {
+  color: var(--accent-soft);
+  gap: 14px;
+  border-color: var(--accent-soft);
+}
+
+@media (max-width: 780px) {
+  .panel,
+  .panelReverse {
+    grid-template-columns: 1fr;
+  }
+  .panelReverse .imageWrap,
+  .panelReverse .panelCopy {
+    order: initial;
+  }
+  .featureList {
+    grid-template-columns: 1fr;
+  }
+}

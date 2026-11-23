@@ -1,0 +1,396 @@
+/* ===========================================================
+   Hero — fullscreen photo hero
+   =========================================================== */
+
+.hero {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  isolation: isolate;
+}
+
+/* ---------- Background ambient video (blurred duplicate) --------- */
+.bgVideoWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  transform: scale(1.15); /* hides blur edge artifacts */
+}
+
+.bgVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(38px) saturate(1.2) brightness(0.55);
+  opacity: 0.75;
+  transform: scale(1.08);
+}
+
+/* ---------- Foreground video ---------- */
+.fgVideoWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+.fgVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+/* ---------- Gradient overlays for readability + mood ---------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.overlayBottom {
+  background: linear-gradient(
+    180deg,
+    rgba(8, 6, 5, 0.15) 0%,
+    rgba(8, 6, 5, 0.15) 30%,
+    rgba(10, 7, 5, 0.55) 62%,
+    rgba(8, 5, 4, 0.92) 100%
+  );
+}
+
+.overlaySide {
+  background: linear-gradient(
+    90deg,
+    rgba(6, 4, 3, 0.75) 0%,
+    rgba(6, 4, 3, 0.15) 38%,
+    rgba(6, 4, 3, 0) 60%,
+    rgba(6, 4, 3, 0.35) 100%
+  );
+}
+
+.overlayGlow {
+  background:
+    radial-gradient(60% 45% at 22% 78%, rgba(255, 138, 61, 0.16), transparent 70%),
+    radial-gradient(45% 35% at 85% 20%, rgba(90, 160, 255, 0.10), transparent 70%);
+  mix-blend-mode: screen;
+}
+
+/* ---------- Three.js particle canvas layer ---------- */
+.particleLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ---------- Content ---------- */
+.content {
+  position: relative;
+  z-index: 4;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(24px, 5vw, 72px);
+  padding-bottom: clamp(64px, 10vh, 120px);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.tagline {
+  font-family: var(--font-mono);
+  font-size: clamp(11px, 1.1vw, 13px);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #ffc794;
+  opacity: 0;
+  margin-bottom: clamp(14px, 2vw, 22px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tagline::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, #ff8a3d, transparent);
+}
+
+.nameStack {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.86;
+  margin-bottom: clamp(20px, 3vw, 32px);
+}
+
+.nameLine {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(56px, 12vw, 168px);
+  letter-spacing: -0.02em;
+  color: #f7f0e8;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.nameLine span {
+  display: inline-block;
+}
+
+.nameLineAccent {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(15px, 1.6vw, 19px);
+  line-height: 1.6;
+  color: rgba(240, 232, 222, 0.72);
+  max-width: 560px;
+  opacity: 0;
+}
+
+.subtitle strong {
+  color: rgba(255, 210, 170, 0.95);
+  font-weight: 600;
+}
+
+/* ---------- Controls (glassmorphism) ---------- */
+.controls {
+  position: absolute;
+  z-index: 5;
+  right: clamp(20px, 4vw, 56px);
+  bottom: clamp(28px, 6vh, 56px);
+  display: flex;
+  gap: 12px;
+  opacity: 0;
+}
+
+.glassBtn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #f7f0e8;
+  transition: background 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+}
+
+.glassBtn:hover {
+  background: rgba(255, 138, 61, 0.18);
+  border-color: rgba(255, 190, 140, 0.45);
+  transform: translateY(-2px);
+}
+
+.glassBtn:active {
+  transform: translateY(0) scale(0.94);
+}
+
+.glassBtn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---------- Tap for sound badge ---------- */
+.soundHint {
+  position: absolute;
+  z-index: 5;
+  top: clamp(88px, 12vh, 108px); /* sits below the fixed nav */
+  right: clamp(20px, 4vw, 56px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(20, 14, 10, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #f2e6da;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.soundHintDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff8a3d;
+  box-shadow: 0 0 0 0 rgba(255, 138, 61, 0.6);
+  animation: pulseDot 1.8s ease-out infinite;
+}
+
+@keyframes pulseDot {
+  0% { box-shadow: 0 0 0 0 rgba(255, 138, 61, 0.55); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 138, 61, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 138, 61, 0); }
+}
+
+.soundHintHidden {
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
+
+/* ---------- Scroll indicator ---------- */
+.scrollIndicator {
+  position: absolute;
+  z-index: 5;
+  bottom: clamp(20px, 4vh, 36px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: rgba(240, 232, 222, 0.6);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: color 0.3s ease;
+}
+
+.scrollIndicator:hover {
+  color: rgba(255, 200, 150, 0.9);
+}
+
+.scrollLine {
+  width: 1px;
+  height: 42px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), transparent);
+  position: relative;
+  overflow: hidden;
+}
+
+.scrollLine::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(180deg, transparent, #ff8a3d, transparent);
+  animation: scrollPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0% { top: -40%; }
+  100% { top: 100%; }
+}
+
+/* ---------- Fade-in on load ---------- */
+.heroLoaded .fgVideoWrap {
+  opacity: 1;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .scrollLine::after,
+  .soundHintDot {
+    animation: none;
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 720px) {
+  .content {
+    padding-bottom: clamp(96px, 16vh, 140px);
+  }
+  .nameLine {
+    font-size: clamp(44px, 15vw, 84px);
+  }
+  .controls {
+    bottom: 96px;
+    right: 20px;
+  }
+  .glassBtn {
+    width: 46px;
+    height: 46px;
+  }
+  .soundHint span.hintLabel {
+    display: none;
+  }
+}
+
+/* ===========================================================
+   Light theme. The default (dark) look above is unchanged; in
+   light mode the same video is washed with warm cream gradients
+   so dark text stays readable on top of it.
+   =========================================================== */
+:global([data-theme="light"]) .bgVideo {
+  filter: blur(38px) saturate(1.1) brightness(1.15);
+  opacity: 0.5;
+}
+:global([data-theme="light"]) .overlayBottom {
+  background: linear-gradient(
+    180deg,
+    rgba(250, 247, 242, 0) 0%,
+    rgba(250, 247, 242, 0) 20%,
+    rgba(250, 247, 242, 0.55) 45%,
+    rgba(250, 247, 242, 0.86) 66%,
+    rgba(247, 242, 234, 0.97) 100%
+  );
+}
+:global([data-theme="light"]) .overlaySide {
+  background: linear-gradient(
+    90deg,
+    rgba(250, 247, 242, 0.92) 0%,
+    rgba(250, 247, 242, 0.55) 38%,
+    rgba(250, 247, 242, 0.12) 60%,
+    rgba(250, 247, 242, 0) 72%,
+    rgba(250, 247, 242, 0.2) 100%
+  );
+}
+:global([data-theme="light"]) .overlayGlow { opacity: 0.35; }
+:global([data-theme="light"]) .tagline {
+  color: var(--text);
+  font-weight: 500;
+}
+:global([data-theme="light"]) .nameLine { color: var(--text); }
+:global([data-theme="light"]) .subtitle { color: var(--text-dim); }
+:global([data-theme="light"]) .subtitle strong { color: var(--accent-soft); }
+:global([data-theme="light"]) .glassBtn {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(20, 14, 10, 0.18);
+}
+:global([data-theme="light"]) .glassBtn:hover {
+  background: rgba(232, 103, 42, 0.16);
+  border-color: rgba(232, 103, 42, 0.5);
+}
+:global([data-theme="light"]) .soundHint {
+  background: rgba(250, 247, 242, 0.8);
+  color: var(--text);
+  border-color: rgba(20, 14, 10, 0.16);
+}
+:global([data-theme="light"]) .scrollIndicator { color: var(--text-dim); }
+:global([data-theme="light"]) .scrollLine {
+  background: linear-gradient(180deg, rgba(20, 14, 10, 0.45), transparent);
+}

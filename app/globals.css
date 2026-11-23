@@ -1,0 +1,136 @@
+:root {
+  /* palette */
+  --bg: #0a0806;
+  --bg-alt: #0e0b08;
+  --surface: #14100c;
+  --surface-hover: #19140f;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --text: #f2ece2;
+  --text-dim: rgba(240, 232, 222, 0.66);
+  --text-faint: rgba(240, 232, 222, 0.42);
+  --accent: #ff8a3d;
+  --accent-soft: #ffb877;
+  --accent-dim: rgba(255, 138, 61, 0.16);
+  --blue-glow: rgba(90, 160, 255, 0.14);
+
+  /* nav + theme switch + accent text (overridden in the light theme below) */
+  --nav-bg: rgba(10, 8, 6, 0.72);
+  --nav-bg-top: transparent;
+  --nav-blur-top: 0px;
+  --toggle-bg: rgba(255, 255, 255, 0.1);
+  --toggle-border: rgba(255, 255, 255, 0.3);
+  --toggle-icon: rgba(242, 236, 226, 0.75);
+  --toggle-thumb: linear-gradient(135deg, #ffcf9f, #ff8a3d);
+  --toggle-thumb-icon: #1c1209;
+  --accent-gradient: linear-gradient(120deg, #ffcf9f 0%, #ff8a3d 45%, #ff6a2c 75%);
+
+  /* layout */
+  --container: 1240px;
+  --section-pad-y: clamp(72px, 12vh, 160px);
+  --section-pad-x: clamp(24px, 6vw, 72px);
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body), -apple-system, BlinkMacSystemFont, sans-serif;
+  scroll-behavior: smooth;
+}
+
+html {
+  scroll-padding-top: 84px;
+  color-scheme: dark;
+}
+
+/* ---------- Light theme ----------
+   Toggled via data-theme="light" on <html>, set by ThemeToggle and
+   initialized pre-hydration (see app/layout.jsx) to avoid a flash. */
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #faf7f2;
+  --bg-alt: #f2ece1;
+  --surface: #ffffff;
+  --surface-hover: #f8f2e9;
+  --border: rgba(20, 14, 10, 0.09);
+  --border-strong: rgba(20, 14, 10, 0.18);
+  --text: #1c1712;
+  --text-dim: rgba(28, 23, 18, 0.68);
+  --text-faint: rgba(28, 23, 18, 0.46);
+  --accent: #e8672a;
+  --accent-soft: #d85f28;
+  --accent-dim: rgba(232, 103, 42, 0.12);
+  --blue-glow: rgba(60, 120, 220, 0.08);
+  --nav-bg: rgba(250, 247, 242, 0.82);
+  --nav-bg-top: rgba(250, 247, 242, 0.66);
+  --nav-blur-top: 14px;
+  --toggle-bg: rgba(20, 14, 10, 0.06);
+  --toggle-border: rgba(20, 14, 10, 0.28);
+  --toggle-icon: rgba(28, 23, 18, 0.55);
+  --toggle-thumb: linear-gradient(135deg, #ff9d5c, #e8672a);
+  --toggle-thumb-icon: #ffffff;
+  --accent-gradient: linear-gradient(120deg, #e8672a 0%, #d85f28 60%, #b94a1a 100%);
+}
+
+body {
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* Shared mask wrapper used by KineticHeadline for the word-reveal effect */
+.maskLine {
+  overflow: hidden;
+  display: block;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 3px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
